@@ -1,10 +1,12 @@
 package com.example.intentoderecyclerview
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.intentoderecyclerview.FrutaProvider.Companion.listaFrutas
 import com.example.intentoderecyclerview.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,5 +64,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun onItemSelected(fruta: Fruta) {
         Toast.makeText(this,"Has pulsado sobre ${fruta.nombre}",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        lateinit var frutaAfectada:Fruta
+        lateinit var miIntent:Intent
+        frutaAfectada = listaFrutas[item.groupId]
+        when (item.itemId){
+            0 ->{
+                val alert =
+                    AlertDialog.Builder(this).setTitle("Eliminar ${frutaAfectada.nombre}")
+                        .setMessage("¿Estás seguro de que quieres eliminar ${frutaAfectada.nombre}?"
+                        )
+                        .setNeutralButton("Cerrar", null).setPositiveButton(
+                            "Aceptar"
+                        ){_,_ ->
+                            display("Se ha eliminado ${frutaAfectada.nombre}")
+                            listaFrutas.removeAt(item.groupId)
+                            adapter.notifyItemRemoved(item.groupId)
+                            binding.rvFrutas.adapter = FrutaAdapter(listaFrutas){
+                                fruta -> onItemSelected(fruta)
+                            }
+                        }.create()
+                alert.show()
+            }
+            else -> return super.onContextItemSelected(item)
+        }
+        return true
+    }
+
+    private fun display(message: String) {
+        Snackbar.make(binding.root,message,Snackbar.LENGTH_SHORT).show()
     }
 }
