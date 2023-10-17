@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">FruitsEditor</string>
+    <string name="app_name">Editor de Frutas</string>
     <string name="codigo">Code</string>
     <string name="clave">Password</string>
     <string name="usuario">User</string>
+    <string name="nombre">Name</string>
+    <string name="devolver">Return</string>
 </resources>
