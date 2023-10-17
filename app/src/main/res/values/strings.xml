@@ -3,4 +3,6 @@
     <string name="codigo">Code</string>
     <string name="clave">Password</string>
     <string name="usuario">User</string>
+    <string name="nombre">Nombre</string>
+    <string name="devolver">Devolver</string>
 </resources>

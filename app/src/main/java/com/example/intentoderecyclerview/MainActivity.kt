@@ -1,11 +1,18 @@
 package com.example.intentoderecyclerview
 
+import android.app.Activity
+import android.app.Instrumentation.ActivityResult
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,6 +30,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: FrutaAdapter
     private lateinit var layoutManager:LayoutManager
 
+    private lateinit var intentLaunch:ActivityResultLauncher<Intent>
+    private var nombre="Sin nombre"
+    private var id:Int=0
+    private var imagenFruta: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
@@ -32,11 +44,29 @@ class MainActivity : AppCompatActivity() {
         adapter=FrutaAdapter(FrutaProvider.listaFrutas){fruta ->
             onItemSelected(fruta)
         }
+
         binding.rvFrutas.adapter=adapter
         binding.rvFrutas.setHasFixedSize(true)
         binding.rvFrutas.itemAnimator=DefaultItemAnimator()
         val decoration=DividerItemDecoration(this,RecyclerView.VERTICAL)
         binding.rvFrutas.addItemDecoration(decoration)
+
+        //Para recibir las cosas
+        intentLaunch = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult())
+        {
+            result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                nombre = result.data?.extras?.getString("nombre").toString()//ActivityDos debe tener esta key para recibir los datos ("nombre")
+                id = result.data?.extras?.getInt("id")as Int
+                FrutaProvider.listaFrutas[id].nombre = nombre
+                adapter = FrutaAdapter(FrutaProvider.listaFrutas){
+                    fruta -> onItemSelected(fruta)
+                }
+                adapter.notifyItemChanged(id)
+                binding.rvFrutas.adapter = adapter
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,6 +118,12 @@ class MainActivity : AppCompatActivity() {
                         }.create()
                 alert.show()
             }
+            1 ->{
+               miIntent = Intent(this, ActivityDos::class.java)
+                miIntent.putExtra("nombreFruta", FrutaProvider.listaFrutas[item.groupId].nombre)//Esta es la key que uso para enviar objetos (""nombreFruta)
+                miIntent.putExtra("id", item.groupId)
+                miIntent.putExtra("imagen", FrutaProvider.listaFrutas[item.groupId].imagen)
+            }
             else -> return super.onContextItemSelected(item)
         }
         return true
@@ -96,4 +132,5 @@ class MainActivity : AppCompatActivity() {
     private fun display(message: String) {
         Snackbar.make(binding.root,message,Snackbar.LENGTH_SHORT).show()
     }
+
 }
