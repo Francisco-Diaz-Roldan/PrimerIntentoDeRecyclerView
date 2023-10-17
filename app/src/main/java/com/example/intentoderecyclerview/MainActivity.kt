@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity() {
                 miIntent.putExtra("nombreFruta", FrutaProvider.listaFrutas[item.groupId].nombre)//Esta es la key que uso para enviar objetos (""nombreFruta)
                 miIntent.putExtra("id", item.groupId)
                 miIntent.putExtra("imagen", FrutaProvider.listaFrutas[item.groupId].imagen)
+                intentLaunch.launch(miIntent)
             }
             else -> return super.onContextItemSelected(item)
         }
