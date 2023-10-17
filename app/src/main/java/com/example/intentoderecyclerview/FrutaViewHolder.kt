@@ -35,5 +35,6 @@ class FrutaViewHolder(view:View): RecyclerView.ViewHolder(view) , View.OnCreateC
     ){
         menu!!.setHeaderTitle(fruta.nombre)
         menu.add(this.adapterPosition,0,0,"Eliminar")
+        menu.add(this.adapterPosition,1,1,"Editar")
     }
 }

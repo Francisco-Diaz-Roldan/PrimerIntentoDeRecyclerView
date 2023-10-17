@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             result ->
             if(result.resultCode == Activity.RESULT_OK){
                 nombre = result.data?.extras?.getString("nombre").toString()//ActivityDos debe tener esta key para recibir los datos ("nombre")
-                id = result.data?.extras?.getInt("id")as Int
+                id = result.data?.extras?.getInt("idFruta")as Int
                 FrutaProvider.listaFrutas[id].nombre = nombre
                 adapter = FrutaAdapter(FrutaProvider.listaFrutas){
                     fruta -> onItemSelected(fruta)
@@ -121,8 +121,8 @@ class MainActivity : AppCompatActivity() {
             1 ->{
                miIntent = Intent(this, ActivityDos::class.java)
                 miIntent.putExtra("nombreFruta", FrutaProvider.listaFrutas[item.groupId].nombre)//Esta es la key que uso para enviar objetos (""nombreFruta)
-                miIntent.putExtra("id", item.groupId)
-                miIntent.putExtra("imagen", FrutaProvider.listaFrutas[item.groupId].imagen)
+                miIntent.putExtra("idFruta", item.groupId)
+                miIntent.putExtra("imagenFruta", FrutaProvider.listaFrutas[item.groupId].imagen)
                 intentLaunch.launch(miIntent)
             }
             else -> return super.onContextItemSelected(item)
