@@ -1,21 +1,19 @@
-package com.example.intentoderecyclerview;
+package com.example.intentoderecyclerview.viewholders;
 
 
 import android.view.ContextMenu
 import android.view.View;
-import android.view.View.OnClickListener
-import android.widget.AdapterView.AdapterContextMenuInfo
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.intentoderecyclerview.databinding.ItemFrutaBinding
+import com.example.intentoderecyclerview.modelos.Fruta
 
 class FrutaViewHolder(view:View): RecyclerView.ViewHolder(view) , View.OnCreateContextMenuListener {
 
     private val binding = ItemFrutaBinding.bind(view)
-    private lateinit var fruta:Fruta
+    private lateinit var fruta: Fruta
 
-    fun render(item:Fruta, onClickListener: (Fruta)->Unit){
+    fun render(item: Fruta, onClickListener: (Fruta)->Unit){
         fruta=item
         binding.tvFrutaNombre.text=item.nombre
         binding.tvDescripcion.text=item.descripcion

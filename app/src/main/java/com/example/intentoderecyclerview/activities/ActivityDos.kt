@@ -1,4 +1,4 @@
-package com.example.intentoderecyclerview
+package com.example.intentoderecyclerview.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.intentoderecyclerview.R
 
 class ActivityDos: AppCompatActivity() {
 
-    private lateinit var binding:ActivityDos  //Declaro una instancia de ActivityDos
+    private lateinit var binding: ActivityDos  //Declaro una instancia de ActivityDos
     private var id : Int = 0                  //Declaro la variable id, que actúa como índice/identificador
 
     override fun onCreate(savedInstanceState: Bundle?) {

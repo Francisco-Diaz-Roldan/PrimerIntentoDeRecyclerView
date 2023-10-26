@@ -1,15 +1,11 @@
-package com.example.intentoderecyclerview
+package com.example.intentoderecyclerview.activities
 
 import android.app.Activity
-import android.app.Instrumentation.ActivityResult
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +15,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.example.intentoderecyclerview.FrutaProvider.Companion.listaFrutas
+import com.example.intentoderecyclerview.modelos.Fruta
+import com.example.intentoderecyclerview.adapters.FrutaAdapter
+import com.example.intentoderecyclerview.providers.FrutaProvider
+import com.example.intentoderecyclerview.providers.FrutaProvider.Companion.listaFrutas
+import com.example.intentoderecyclerview.R
 import com.example.intentoderecyclerview.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         layoutManager=LinearLayoutManager(this)
         binding.rvFrutas.layoutManager=layoutManager
-        adapter=FrutaAdapter(FrutaProvider.listaFrutas){fruta ->
+        adapter= FrutaAdapter(listaFrutas){ fruta ->
             onItemSelected(fruta)
         }
 
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 nombre = result.data?.extras?.getString("nombre").toString()//ActivityDos debe tener esta key para recibir los datos ("nombre")
                 id = result.data?.extras?.getInt("idFruta")as Int
                 FrutaProvider.listaFrutas[id].nombre = nombre
-                adapter = FrutaAdapter(FrutaProvider.listaFrutas){
+                adapter = FrutaAdapter(listaFrutas){
                     fruta -> onItemSelected(fruta)
                 }
                 adapter.notifyItemChanged(id)
@@ -86,8 +86,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addFruta() {
-        listaFrutas.add(listaFrutas.size,Fruta("Nueva fruta ${listaFrutas.size}",
-            "Desconocida", R.drawable.ciruela))
+        listaFrutas.add(listaFrutas.size, Fruta(
+            5,
+            "Nueva fruta ${listaFrutas.size}", "Desconocida", R.drawable.ciruela
+        )
+        )
     adapter.notifyItemInserted(listaFrutas.size)
     layoutManager.scrollToPosition(listaFrutas.size)
     }
@@ -97,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        lateinit var frutaAfectada:Fruta
+        lateinit var frutaAfectada: Fruta
         lateinit var miIntent:Intent
         frutaAfectada = listaFrutas[item.groupId]
         when (item.itemId){
